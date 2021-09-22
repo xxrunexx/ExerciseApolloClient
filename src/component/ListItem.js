@@ -22,7 +22,7 @@ const UpdatePassenger = gql
 
 
 const ListItem = (props) => {
-  const { id, nama, umur, jenis_kelamin, hapusPengunjung } = props.data;
+  const { id, nama, umur, jenis_kelamin} = props.data;
   const [updatePassenger, {loading}] = useMutation(UpdatePassenger, {
   refetchQueries: [GetAllPassengers]
   })
@@ -52,7 +52,7 @@ const ListItem = (props) => {
       </td>
       <td>{umur}</td>
       <td>{jenis_kelamin}</td>
-      <td className="removeBorder" onClick={() => hapusPengunjung}>
+      <td className="removeBorder" onClick={() => props.hapusPengunjung(id)}>
         <button>Hapus</button>
       </td>
     </tr>
