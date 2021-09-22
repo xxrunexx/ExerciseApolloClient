@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import PassengerInput from "./PassengerInput";
 import ListPassenger from "./ListPassenger";
 import Header from "./Header";
@@ -104,7 +103,7 @@ function Home() {
   const [deletePassenger, { loading: loadingDelete}] = useMutation(DeletePassenger, {
     refetchQueries: [GetAllPassengers]
   });
-  
+
   const [updatePassenger, { loading: loadingUpdate}] = useMutation(UpdatePassenger, {
     refetchQueries: [GetAllPassengers]
   });
@@ -171,9 +170,9 @@ function Home() {
     insertPassenger({variables :{
       object: {
         id: newData.id,
-          nama: newData.nama,
-          umur: newData.umur,
-          jenis_kelamin: newData.jenisKelamin
+        nama: newData.nama,
+        umur: newData.umur,
+        jenis_kelamin: newData.jenisKelamin
       }   
     }})
   }
@@ -212,7 +211,7 @@ function Home() {
         </div>
       )}
       {!errorAllData && !loadingAllData && !loadingSingleData && !loadingSingleAgeData && !loadingSingleNameData && (
-        <ListPassenger data={passengers} hapusPengunjung={hapusPengunjung}/>
+        <ListPassenger data={allData?.anggota} hapusPengunjung={hapusPengunjung}/>
       )}
       <PassengerInput tambahPengunjung={tambahPengunjung}/>
     </div>

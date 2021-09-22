@@ -1,6 +1,6 @@
 import "./Home.css";
 import { gql, useQuery, useLazyQuery , useMutation} from '@apollo/client';
-import {useState } from 'react'
+import { useState } from 'react'
 
 const GetAllPassengers = gql`
   query MyQuery {
