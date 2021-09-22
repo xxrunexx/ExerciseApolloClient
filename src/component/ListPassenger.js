@@ -18,6 +18,7 @@ const ListPassenger = (props) => {
               key={item.id}
               data={item}
               hapusPengunjung={props.hapusPengunjung}
+              submitNama={props.submitNama}
             />
           ))}
         </tbody>

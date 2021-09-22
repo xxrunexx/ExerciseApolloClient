@@ -1,31 +1,14 @@
 import "./Home.css";
 import { gql, useQuery, useLazyQuery , useMutation} from '@apollo/client';
 import { useState } from 'react'
+import useUpdatePassenger from "../hooks/useUpdatePassenger";
 
-const GetAllPassengers = gql`
-  query MyQuery {
-    anggota {
-      jenis_kelamin
-      id
-      nama
-      umur
-    }
-  }
-`;
 
-const UpdatePassenger = gql 
-`mutation MyMutation4($nama: String!, $id: Int!) {
-  update_anggota(where: {id: {_eq: $id}}, _set: {nama: $nama}) {
-    affected_rows
-  }
-}`
 
 
 const ListItem = (props) => {
   const { id, nama, umur, jenis_kelamin} = props.data;
-  const [updatePassenger, {loading}] = useMutation(UpdatePassenger, {
-  refetchQueries: [GetAllPassengers]
-  })
+  const { updatePassenger } = useUpdatePassenger();
 
   const [statusNama, setStatusNama] = useState(false)
   const [newNama, setnewNama] = useState('')

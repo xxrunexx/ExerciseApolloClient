@@ -4,112 +4,38 @@ import ListPassenger from "./ListPassenger";
 import Header from "./Header";
 import { useQuery, useLazyQuery, gql, useMutation } from "@apollo/client";
 import LoadingSvg from './LoadingSvg'
-
-const GetAllPassengers = gql`
-  query MyQuery {
-    anggota {
-      jenis_kelamin
-      id
-      nama
-      umur
-    }
-  }
-`;
-
-const GetSinglePassenger = gql`
-  query MyQuery($id: Int!) {
-    anggota(where: { id: { _eq: $id } }) {
-      id
-      jenis_kelamin
-      nama
-      umur
-    }
-  }
-`;
-
-const GetPassengerAge = gql`
-  query MyQuery($umur: Int!) {
-    anggota(where: { umur: { _eq: $umur } }) {
-      id
-      jenis_kelamin
-      nama
-      umur
-    }
-  }
-`;
-
-const GetPassengerName = gql`
-  query MyQuery($nama: String!) {
-    anggota(where: { nama: { _eq: $nama } }) {
-      id
-      jenis_kelamin
-      nama
-      umur
-    }
-  }
-`;
-
-const InsertPassenger = gql`
-  mutation MyMutation($object: anggota_insert_input!) {
-    insert_anggota_one(object: $object) {
-      id
-    }
-  }
-`
-
-const DeletePassenger = gql`
-  mutation MyMutation($id: Int!) {
-    delete_anggota_by_pk(id: $id) {
-      id
-      nama
-      umur
-      jenis_kelamin
-    }
-  }
-`
-const UpdatePassenger = gql 
-`mutation MyMutation4($nama: String!, $id: Int!) {
-  update_anggota(where: {id: {_eq: $id}}, _set: {nama: $nama}) {
-    affected_rows
-  }
-}`
+import useInsertPassenger from "../hooks/useInsertPassenger";
+import useDeletePassenger from "../hooks/useDeletePassenger";
+import useUpdatePassenger from "../hooks/useUpdatePassenger";
+import useGetData from "../hooks/useGetData";
+import { GetAllPassengers } from "../graphql/query";
+import useSingleData from "../hooks/useSingleData";
+import useGetPassengerAge from "../hooks/useGetPassengerAge";
+import useGetPassengerName from "../hooks/useGetPassengerName";
 
 function Home() {
   // Query ( Data Definition )
-  const [getData,
-    { data: singleData, 
-      loading: loadingSingleData, 
-      errorSingleData 
-    },] = useLazyQuery(GetSinglePassenger);
+  const {subscribePassenger} = useGetData();
+  const {getData,singleData,loadingSingleData,errorSingleData} = useSingleData();
+  const {getAgeData, singleAgeData, loadingSingleAgeData} = useGetPassengerAge();
+  const {getNameData, singleNameData, loadingSingleNameData} = useGetPassengerName();
 
-  const [getAgeData,
-    { data: singleAgeData, 
-      loading: loadingSingleAgeData, 
-      errorSingleAgeData 
-    },] = useLazyQuery(GetPassengerAge);
-
-  const [getNameData,
-    { data: singleNameData, 
-      loading: loadingSingleNameData, 
-      errorSingleNameData 
-    },] = useLazyQuery(GetPassengerName);
   const { data: allData, loading: loadingAllData, error: errorAllData } = useQuery(GetAllPassengers);
 
   // Mutation ( Data Manipulation )
-  const [insertPassenger, { loading: loadingInsert}] = useMutation(InsertPassenger, {
-    refetchQueries: [GetAllPassengers]
-  });
 
-  const [deletePassenger, { loading: loadingDelete}] = useMutation(DeletePassenger, {
-    refetchQueries: [GetAllPassengers]
-  });
-
-  const [updatePassenger, { loading: loadingUpdate}] = useMutation(UpdatePassenger, {
-    refetchQueries: [GetAllPassengers]
-  });
+  const { insertPassenger, loadingInsert } = useInsertPassenger();
+  const { deletePassenger, loadingDelete } = useDeletePassenger();
+  const { loadingUpdate } = useUpdatePassenger();
 
   const [value, setValue] = useState(0);
   const [passengers, setPassengers] = useState([]);
+  console.log("passengers : ", passengers);
+  console.log("setpassengers : ", setPassengers);
+
+  useEffect(() => {
+    subscribePassenger()
+  }, [])
 
   useEffect(() => {
     if (allData) {
