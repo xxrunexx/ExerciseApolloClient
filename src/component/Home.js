@@ -30,6 +30,8 @@ function Home() {
 
   const [value, setValue] = useState(0);
   const [passengers, setPassengers] = useState([]);
+  const [passengersID, setPassengersID] = useState([]);
+
   console.log("passengers : ", passengers);
   console.log("setpassengers : ", setPassengers);
 
@@ -45,7 +47,7 @@ function Home() {
 
   useEffect(() => {
     if (singleData) {
-      setPassengers(singleData.anggota);
+      setPassengersID(singleData.anggota);
     }
   }, [singleData]);
 
@@ -109,6 +111,18 @@ function Home() {
     }})
   }
 
+  const filteredData = () => {
+    if (singleData?.anggota != null){
+      return singleData?.anggota
+    } else if (singleAgeData?.anggota != null){
+      return singleAgeData?.anggota
+    } else if (singleNameData?.anggota != null){
+      return singleNameData?.anggota
+    } else {
+      return allData?.anggota
+    }
+  }
+
   if (errorSingleData || errorAllData) {
     return <p>Something Went Wrong...</p>;
   }
@@ -137,7 +151,8 @@ function Home() {
         </div>
       )}
       {!errorAllData && !loadingAllData && !loadingSingleData && !loadingSingleAgeData && !loadingSingleNameData && (
-        <ListPassenger data={allData?.anggota} hapusPengunjung={hapusPengunjung}/>
+        <ListPassenger data={filteredData()} hapusPengunjung={hapusPengunjung}/>
+        // <ListPassenger data={singleData ? singleData.anggota : allData?.anggota} hapusPengunjung={hapusPengunjung}/>
       )}
       <PassengerInput tambahPengunjung={tambahPengunjung}/>
     </div>
