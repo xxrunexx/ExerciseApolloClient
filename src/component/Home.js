@@ -87,7 +87,9 @@ function Home() {
       loading: loadingSingleAgeData, 
       errorSingleAgeData 
     },] = useLazyQuery(GetPassengerAge);
-
+    if (singleAgeData != []){
+      console.log("singleData",singleData)
+    }
   const [getNameData,
     { data: singleNameData, 
       loading: loadingSingleNameData, 
@@ -140,7 +142,7 @@ function Home() {
   };
 
   const HandlerId = () => {
-    getData({
+     getData({
       variables: {
         id: value,
       },
@@ -211,9 +213,10 @@ function Home() {
         </div>
       )}
       {!errorAllData && !loadingAllData && !loadingSingleData && !loadingSingleAgeData && !loadingSingleNameData && (
-        <ListPassenger data={allData?.anggota} hapusPengunjung={hapusPengunjung}/>
+        <ListPassenger data={singleData ? singleData.anggota : allData?.anggota} hapusPengunjung={hapusPengunjung}/>
       )}
       <PassengerInput tambahPengunjung={tambahPengunjung}/>
+      {/* {singleData ? singleData.anggota.map(x => x.nama) : null} */}
     </div>
   );
 }
